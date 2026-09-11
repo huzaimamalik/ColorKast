@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import field, form_errors %}
+{% block title %}Create administrator{% endblock %}
+{% block content %}<div class="narrow"><a class="back-link" href="{{ url_for('admin.users') }}">← Administrators</a><h1>Create administrator</h1><p class="intro">Grant access at your own level or below.</p>{{ form_errors(form) }}<form method="post" class="panel">{{ form.hidden_tag() }}{{ field(form.username, '3–60 characters: letters, numbers, underscore, dot, or hyphen.') }}{{ field(form.password, '12–128 characters. Share the password separately with the administrator.') }}{{ field(form.level) }}<button type="submit">Create administrator</button></form></div>{% endblock %}

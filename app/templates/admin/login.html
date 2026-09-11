@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import field, form_errors %}
+{% block title %}Admin login{% endblock %}
+{% block content %}<div class="narrow"><p class="eyebrow">ADMINISTRATION</p><h1>Welcome back</h1><p class="intro">Sign in to manage paints and administrator access.</p>{{ form_errors(form) }}<form method="post" class="panel">{{ form.hidden_tag() }}{{ field(form.username) }}{{ field(form.password) }}<button type="submit">Sign in</button></form><p class="muted">Public color tools and palettes do not require an account.</p></div>{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import field, form_errors %}
+{% block title %}Choose a color{% endblock %}
+{% block content %}
+<p class="eyebrow">01 / COLOR TOOLKIT</p><h1>Choose a color</h1><p class="intro">Pick a color visually or type its RGB values. Save it as a custom color in your palette.</p>
+{{ form_errors(form) }}
+<div class="chooser-layout">
+<form method="post" class="panel" id="chooser-form">
+  {{ form.hidden_tag() }}
+  <div class="field"><label for="color-picker">Graphical color picker</label><input type="color" id="color-picker" value="{{ hex_value }}"><small>RGB controls below also work without a pointing device.</small></div>
+  <div class="rgb-fields">{{ field(form.red, '0–255') }}{{ field(form.green, '0–255') }}{{ field(form.blue, '0–255') }}</div>
+  <div class="actions"><button name="action" value="preview" type="submit">Update preview</button><button name="action" value="add" class="secondary" type="submit">+ Add to palette</button></div>
+</form>
+<section class="preview-card" aria-label="Selected color"><div id="color-preview" style="background-color: {{ hex_value }}"></div><div class="paint-info"><h2>Selected color</h2><p id="color-readout" class="color-code" aria-live="polite">RGB {{ rgb|join(', ') }} · {{ hex_value }}</p><p id="color-feedback" role="status">Each RGB component must be an integer from 0 through 255.</p></div></section>
+</div>
+{% endblock %}

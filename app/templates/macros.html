@@ -1,0 +1,42 @@
+{% macro field(control, hint='') %}
+<div class="field">
+  {{ control.label }}
+  {% if control.errors %}
+  {{ control(aria_invalid='true', aria_describedby=control.id ~ '-errors') }}
+  {% else %}
+  {{ control(aria_describedby=control.id ~ '-hint') }}
+  {% endif %}
+  <small id="{{ control.id }}-hint">{{ hint }}</small>
+  {% if control.errors %}<ul class="field-errors" id="{{ control.id }}-errors" role="alert">{% for error in control.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+</div>
+{% endmacro %}
+
+{% macro form_errors(form) %}
+{% if form.errors %}<div class="alert error" role="alert"><strong>Please correct the form.</strong> Check the messages beside the fields below.</div>{% endif %}
+{% endmacro %}
+
+{% macro swatch(color) %}
+<div class="color-swatch" style="background-color: {{ color.hex_value }}" role="img" aria-label="Color {{ color.hex_value }}"></div>
+{% endmacro %}
+
+{% macro paint_card(paint, distance=none, rank=none) %}
+<article class="paint-card">
+  {{ swatch(paint) }}
+  <div class="paint-info">
+    {% if rank %}<span class="eyebrow">Match {{ rank }} · Distance {{ '%.3f'|format(distance) }}</span>{% endif %}
+    <h3>{{ paint.name }}</h3>
+    <p><strong>{{ paint.paint_number }}</strong> <span class="badge">{{ paint.scheme|capitalize }} scheme</span></p>
+    <p>{{ paint.collection.name }} · {{ paint.collection.company }}</p>
+    <p class="color-code">RGB {{ paint.red }}, {{ paint.green }}, {{ paint.blue }}<br>{{ paint.hex_value }}</p>
+    <form method="post" action="{{ url_for('public.palette_add') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="paint_id" value="{{ paint.id }}">
+      <button type="submit" class="secondary" aria-label="Add {{ paint.name }} {{ paint.paint_number }} from {{ paint.collection.name }} to palette">+ Add to palette</button>
+    </form>
+  </div>
+</article>
+{% endmacro %}
+
+{% macro timing(elapsed) %}
+{% if elapsed is not none %}<p class="timing">Server processing time: <strong>{{ elapsed|timing }} ms</strong> <span>· lookup / computation only</span></p>{% endif %}
+{% endmacro %}

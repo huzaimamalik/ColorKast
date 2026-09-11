@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Explore color{% endblock %}
+{% block content %}
+<section class="hero">
+  <div><p class="eyebrow">THE ABC PAINT COLOR STUDIO</p><h1>Find your next<br><em>color story.</em></h1><p class="intro">Explore our collections, rediscover an old favorite, and bring your colors together in a personal palette.</p><a class="button" href="{{ url_for('public.search') }}">Explore the paint library <span aria-hidden="true">↗</span></a></div>
+  <div class="hero-colors" aria-label="Decorative color inspiration"><div class="tile tile-blue"><span>Harbor Blue<br>#20669E</span></div><div class="tile tile-sand"><span>Desert Sand<br>#D6BC91</span></div><div class="tile tile-clay"><span>Sunset Clay<br>#C3634A</span></div><div class="tile tile-pine"><span>Pine Grove<br>#2A6441</span></div></div>
+</section>
+<div class="section-heading"><h2>Your color toolkit</h2><span>Six simple ways to get started</span></div>
+<div class="task-grid">
+{% for number, endpoint, title, description in [
+('01','public.chooser','Choose a color','Start with a swatch or enter exact RGB values.'),
+('02','public.search','Search paints','Find a paint by name, number, RGB, or HEX.'),
+('03','public.translate','Translate old paint','Find a new-scheme match for a legacy paint.'),
+('04','public.closest','Find closest colors','Compare colors across collections by RGB distance.'),
+('05','public.palette','My palette','Revisit your saved colors, kept for 30 days.'),
+('06','auth.login','Admin login','Manage the paint library and administrator access.')]
+%}<a class="task-card" href="{{ url_for(endpoint) }}"><span class="eyebrow">{{ number }} <span aria-hidden="true">↗</span></span><h3>{{ title }}</h3><p>{{ description }}</p></a>{% endfor %}
+</div>
+<p class="muted demo-note">Demo library · 4 fictional collections · Screen colors are approximate.</p>
+{% endblock %}

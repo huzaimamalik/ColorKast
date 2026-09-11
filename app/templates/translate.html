@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import field, form_errors, paint_card, timing %}
+{% block title %}Translate old paint{% endblock %}
+{% block content %}
+<p class="eyebrow">03 / COLOR TOOLKIT</p><h1>Translate old paint</h1><p class="intro">Find the mapped new-scheme paint in your chosen target collection.</p>
+{{ form_errors(form) }}
+<form method="get" class="panel form-grid">{{ field(form.paint_number, 'Try H001 in Heritage → Horizon. H009 has no translation.') }}{{ field(form.collection_id) }}{{ field(form.target_id) }}<div class="form-submit"><button type="submit">Translate paint</button></div></form>
+{{ timing(elapsed) }}
+{% if searched %}
+{% if not source %}<div class="alert error" role="alert">Unknown source paint. Check the old paint number and source collection.</div>
+{% else %}
+<div class="translation-layout"><section><h2>Original · Old scheme</h2>{{ paint_card(source) }}</section><section><h2>Translation · New scheme</h2>{% for paint in targets %}{{ paint_card(paint) }}{% else %}<div class="alert warning">No translation available for this source paint in the selected target collection.</div>{% endfor %}</section></div>
+{% endif %}{% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import field, form_errors, paint_card, timing %}
+{% block title %}Find closest colors{% endblock %}
+{% block content %}
+<p class="eyebrow">04 / COLOR TOOLKIT</p><h1>Find closest colors</h1><p class="intro">Compare paints by Euclidean RGB distance. A lower distance means a closer RGB match.</p>
+{{ form_errors(form) }}
+<form method="get" class="panel form-grid">{{ field(form.paint_number, 'Try H001, old scheme, Heritage.') }}{{ field(form.collection_id) }}{{ field(form.scheme) }}{{ field(form.target_id) }}{{ field(form.count, 'Positive integer. Requests above the collection size return all paints.') }}<div class="form-submit"><button type="submit">Find closest colors</button></div></form>
+{{ timing(elapsed) }}
+{% if searched %}{% if not source %}<div class="alert error" role="alert">Unknown source paint. Check the number, collection, and scheme.</div>{% else %}
+<p class="source-summary">Source: <strong>{{ source.name }} · {{ source.paint_number }}</strong> · {{ source.collection.name }} · RGB {{ source.rgb|join(', ') }} · {{ source.hex_value }}</p>
+<h2>Closest matches <span class="badge">{{ results|length }}</span></h2>
+{% if results %}<div class="results-grid">{% for paint, distance in results %}{{ paint_card(paint, distance, loop.index) }}{% endfor %}</div>{% else %}<div class="alert info">The target collection has no paints available.</div>{% endif %}
+{% endif %}{% endif %}
+{% endblock %}

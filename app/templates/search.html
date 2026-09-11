@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import field, form_errors, paint_card, timing %}
+{% block title %}Search paints{% endblock %}
+{% block content %}
+<p class="eyebrow">02 / COLOR TOOLKIT</p><h1>Search paints</h1><p class="intro">Explore one collection or the entire library. Names support partial, case-insensitive matching.</p>
+{{ form_errors(form) }}
+<form method="get" class="panel form-grid">{{ field(form.mode) }}{{ field(form.query, 'Name: harbor · Number: H001 · RGB: 32,102,158 · HEX: #20669E') }}{{ field(form.collection_id) }}<div class="form-submit"><button type="submit">Search paints</button></div></form>
+{{ timing(elapsed) }}
+{% if results is not none %}
+<h2>Search results <span class="badge">{{ results|length }}</span></h2>
+{% if results %}<div class="results-grid">{% for paint in results %}{{ paint_card(paint) }}{% endfor %}</div>{% else %}<div class="alert info">No matching paints found. Try another value or search all collections.</div>{% endif %}
+{% endif %}
+{% endblock %}

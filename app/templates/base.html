@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ColorKast{% endblock %} · ABC Paint</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('public.home') }}" accesskey="h"><span class="brand-mark" aria-hidden="true"></span>ColorKast <small>ABC PAINT</small></a>
+    <nav aria-label="Main navigation">
+      {% for endpoint, label, key in [('public.chooser','Choose','c'),('public.search','Search','s'),('public.translate','Translate','t'),('public.closest','Closest','n'),('public.palette','My palette','p')] %}
+      <a href="{{ url_for(endpoint) }}" accesskey="{{ key }}" {% if request.endpoint == endpoint %}aria-current="page"{% endif %}>{{ label }}</a>
+      {% endfor %}
+      <a href="{{ url_for('admin.index' if current_user.is_authenticated else 'auth.login') }}" accesskey="a" {% if request.blueprint in ['admin', 'auth'] %}aria-current="page"{% endif %}>Admin</a>
+    </nav>
+  </header>
+  <main id="main" tabindex="-1">
+    {% if current_user.is_authenticated %}
+    <div class="session-bar"><span>Signed in as <strong>{{ current_user.username }}</strong> · Level {{ current_user.level }}</span><form method="post" action="{{ url_for('auth.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="text-button" type="submit">Log out</button></form></div>
+    {% endif %}
+    {% with messages = get_flashed_messages(with_categories=true) %}{% for category, message in messages %}
+    <div class="alert {{ category }}" role="status"><strong>{{ category|capitalize }}:</strong> {{ message }}</div>
+    {% endfor %}{% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <span>ColorKast · A space to explore color</span>
+    <details><summary>Keyboard shortcuts</summary><p>Use your browser's access-key modifier with H: home, C: chooser, S: search, T: translator, N: closest, P: palette, A: admin. Common combinations: Alt + key on Windows Chrome/Edge; Alt + Shift + key on Firefox; Control + Option + key on macOS. Tab moves between controls; Enter submits a focused form; Space activates a button.</p></details>
+  </footer>
+</body>
+</html>

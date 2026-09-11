@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import swatch %}
+{% block title %}My palette{% endblock %}
+{% block content %}
+<p class="eyebrow">05 / COLOR TOOLKIT</p><h1>My palette</h1><p class="intro">Your recently saved colors, newest first. Each entry expires after 30 days. This palette belongs to this browser session.</p>
+{% if items %}
+<div class="section-heading"><h2>Saved colors <span class="badge">{{ items|length }}</span></h2><form method="post" action="{{ url_for('public.palette_clear') }}" data-confirm="Clear all colors in your palette?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="danger" type="submit">Clear palette</button></form></div>
+<div class="results-grid">{% for item in items %}
+<article class="paint-card">{{ swatch(item) }}<div class="paint-info"><h3>{{ item.label }}</h3>{% if item.paint_number %}<p><strong>{{ item.paint_number }}</strong> · {{ item.collection_name }}</p>{% else %}<p>Custom chooser color</p>{% endif %}<p class="color-code">RGB {{ item.rgb|join(', ') }}<br>{{ item.hex_value }}</p><p class="muted">Saved {{ item.added_at.strftime('%d %b %Y, %H:%M') }} UTC</p><form method="post" action="{{ url_for('public.palette_remove', item_id=item.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="secondary" type="submit" aria-label="Remove {{ item.label }} saved {{ item.added_at }}">Remove color</button></form></div></article>
+{% endfor %}</div>
+{% else %}<div class="empty-state"><h2>A fresh canvas</h2><p>No saved colors yet. Find a paint or mix your own color to start your palette.</p><a class="button" href="{{ url_for('public.chooser') }}">Choose your first color</a></div>{% endif %}
+{% endblock %}

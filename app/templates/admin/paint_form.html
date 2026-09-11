@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import field, form_errors %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}<a class="back-link" href="{{ url_for('admin.paints') }}">← Paint library</a><h1>{{ title }}</h1><p class="intro">All fields are required. Numbers must be unique within a collection and scheme.</p>{{ form_errors(form) }}<form method="post" class="panel">{{ form.hidden_tag() }}<div class="form-grid">{{ field(form.name) }}{{ field(form.paint_number) }}{{ field(form.scheme) }}{{ field(form.collection_id) }}{{ field(form.company, 'Must match the company of the selected collection.') }}</div><div class="rgb-fields">{{ field(form.red, 'Integer 0–255') }}{{ field(form.green, 'Integer 0–255') }}{{ field(form.blue, 'Integer 0–255') }}</div><div class="actions"><button type="submit">Save paint</button><a href="{{ url_for('admin.paints') }}">Cancel</a></div></form>{% endblock %}
